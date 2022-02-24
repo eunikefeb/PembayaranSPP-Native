@@ -1,0 +1,58 @@
+<?php
+require_once("require.php");
+$id = $_GET['id'];
+$petugas = mysqli_query($db, "SELECT * FROM petugas WHERE id_petugas='$id'");
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit data Petugas</title>
+</head>
+<body>
+    <!-- Panggil header -->
+    <?php require("header.php"); ?>
+    <!-- Konten -->
+    <br><h2>Edit data Petugas</h2><br>
+<?php
+while($row = mysqli_fetch_assoc($petugas)){?>
+    <form action="" method="POST">
+        <table cellpadding="5">
+            <input type="hidden" name="id" value="<?= $row['id_petugas']; ?>">
+            <tr>
+                <td>Username :</td>
+                <td><input type="text" name="user" value="<?= $row['username']; ?>"></td>
+            </tr>
+            <tr>
+                <td>Password :</td>
+                <td><input type="text" name="pass" value="<?= $row['password']; ?>"></td>
+            </tr>
+            <tr>
+                <td>Nama Petugas :</td>
+                <td><input type="text" name="nama" value="<?= $row['nama_petugas']; ?>"></td>
+            </tr>
+            <tr>
+                <td><input type="submit" value="simpan" name="simpan" class="btn btn-success"></td>
+            </tr>
+        </table>
+    </form>
+<?php } ?>
+</body>
+</html>
+<?php
+// Proses update
+if(isset($_POST['simpan'])){
+    $id = $_POST['id'];
+    $user = $_POST['user'];
+    $pass = $_POST['pass'];
+    $nama = $_POST['nama'];
+    $update = mysqli_query($db, "UPDATE petugas SET username='$user',
+                                 password='$pass', nama_petugas='$nama'
+                                 WHERE petugas.id_petugas='$id'");
+        if($update){
+            header("location: petugas.php");
+        }else{
+            echo "<script>alert('Gagal'); </script>";
+        }
+}
+?>
